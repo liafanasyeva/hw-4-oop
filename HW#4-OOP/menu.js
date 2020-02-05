@@ -1,6 +1,3 @@
-var bill = [];
-var caloriesCount = [];
-var menuItems = [];
 var isPaid = false;
 
 function FoodCreator(name, price, cal) {
@@ -20,36 +17,6 @@ food.askAboutFood();
 
 //Burgers
 
-var burgerSmall = {
-    name: 'Small Burger',
-    price: 50,
-    cal: 20
-} 
-
-var burgerBig = {
-    name: 'Big Burger',
-    price: 100,
-    cal: 40
-} 
-
-var burgerCheese = {
-    name: 'Cheese stuff',
-    price: 10,
-    cal: 20
-}
-
-var burgerSalad = {
-    name: 'salad',
-    price: 20,
-    cal: 5
-}
-
-var burgerPotato = {
-    name: 'potato',
-    price: 15,
-    cal: 10
-}
-
 //Child class for creating burgers
 
 function BurgerCreator(size, stuff){
@@ -59,144 +26,143 @@ function BurgerCreator(size, stuff){
 
 BurgerCreator.prototype = Object.create(FoodCreator.prototype);
 
+BurgerCreator.SIZE_SMALL = { name: 'Small Burger', price: 50, cal: 20 };
+
+BurgerCreator.WITH_CHESEE = {  name: 'Cheese stuff', price: 10, cal: 20 };
+
+BurgerCreator.WITH_SALAD = {  name: 'Salad', price: 20, cal: 5 };
+
+BurgerCreator.SIZE_BIG = { name: 'Big Burger', price: 100, cal: 40 };
+
+BurgerCreator.WITH_POTATO = { name: 'potato', price: 15, cal: 10 };
+
 //Function to know a price of menuItem
 BurgerCreator.prototype.countPrice = function() {
-    bill.unshift(this.price);
-    return bill[0];
+    return this.price;
 }
 
 //Function to know calories of menuItem
 BurgerCreator.prototype.countCalories = function() {
-    caloriesCount.unshift(this.calories);
-    return caloriesCount[0];
+    return this.calories;
 }
+
+//1
+var burger1 = new BurgerCreator(BurgerCreator.SIZE_SMALL, BurgerCreator.WITH_CHESEE);
+console.log(burger1.name + ' with ' + burger1.stuffName+':\n '
++ burger1.countPrice() + ' tugrics, ' + burger1.countCalories() + ' cal');
+
 
 //Salads
 
-var caesar =  {
-    name: 'Caesar',
-    price: 100,
-    cal: 20
-}
-
-var russianSalad = {
-    name: 'Russian Salad',
-    price: 50,
-    cal: 80
-}
-
 function SaladCreator(salad, weight) {
-		this.weightMenuItem = weight;
+	this.weightMenuItem = weight;
     FoodCreator.call(this, salad.name , salad.price, salad.cal)
-}
+};
 
 SaladCreator.prototype = Object.create(FoodCreator.prototype);
 
+SaladCreator.WEIGHT = { grams: 100 };
+
 //Function to know a price of menuItem
 SaladCreator.prototype.countPrice = function() {
-		this.price = this.price * this.weightMenuItem/100;
-    bill.unshift((this.price));
-    return bill[0];
-}
+	this.price = this.price * this.weightMenuItem/SaladCreator.WEIGHT.grams;
+    return this.price;
+};
 
 //Function to know calories of menuItem
 SaladCreator.prototype.countCalories = function() {
-		this.calories = this.calories * this.weightMenuItem/100;
-    caloriesCount.unshift(this.calories);
-    return caloriesCount[0];
-}
+	this.calories = this.calories * this.weightMenuItem/SaladCreator.WEIGHT.grams;
+    return  this.calories;
+};
+
+SaladCreator.CAESAR =  { name: 'Caesar', price: 100, cal: 20 };
+
+SaladCreator.RUSSIAN_SALAD = { name: 'Russian Salad', price: 50, cal: 80 };
+
+
 
 //2
-var salad1 = new SaladCreator(caesar, 300);
+var salad1 = new SaladCreator( SaladCreator.CAESAR, 150 );
 console.log(salad1.name + ':\n '+ salad1.countPrice() + ' tugrics, ' + salad1.countCalories(50) + ' cal'); 
-//console.log(salad1)
+
 //Drinks
-
-var cola = {
-    name: 'Coca-Cola',
-    price: 50,
-    cal: 30
-}
-
-var coffee = {
-    name: 'Coffee',
-    price: 80,
-    cal: 20
-}
-
 function DrinkCreator(drink) {
     FoodCreator.call(this, drink.name, drink.price, drink.cal);
-}
+};
 
 DrinkCreator.prototype = Object.create(FoodCreator.prototype);
 
 //Function to know a price of menuItem
 DrinkCreator.prototype.countPrice = function() {
-    bill.unshift(this.price);
-    return bill[0];
-}
+    return this.price;
+};
 
 //Function to know calories of menuItem
 DrinkCreator.prototype.countCalories = function() {
-    caloriesCount.unshift(this.calories);
-    return caloriesCount[0];
-}
+    return this.calories;
+};
 
-//1
-var burger1 = new BurgerCreator(burgerSmall, burgerCheese);
-console.log(burger1.name + ' with ' + burger1.stuffName+':\n '+ burger1.countPrice() + ' tugrics, ' + burger1.countCalories() + ' cal');
+DrinkCreator.COLA = { name: 'Coca-Cola', price: 50, cal: 30 };
+
+DrinkCreator.COFFEE = { name: 'Coffee', price: 80, cal: 20 };
 
 //3
-var drink1 = new DrinkCreator(cola);
+var drink1 = new DrinkCreator(DrinkCreator.COFFEE);
 console.log(drink1.name + ':\n '+ drink1.countPrice() + ' tugrics, ' + drink1.countCalories() + ' cal');
 
-//Sum of prices or calories
-function calculatePrice(array){
-    var sum = 0;
-    for(var i = 0; i < array.length; i++){
-        sum += array[i].price;}
-    return sum;
-    }
-    
- function calculateCalories(array){
-    var sum = 0;
-    for(var i = 0; i < array.length; i++){
-        sum += array[i].calories;}
-    return sum;
-    }
+//Order
 
-//To add some food
-function addMenuItem(newmenuItems) {
-    if (isPaid === false){
-      return menuItems = menuItems.concat(newmenuItems);
-    } else { return 'Order has already been paid. Start new order!'}
-}
-addMenuItem(burger1);
-addMenuItem(drink1);
-addMenuItem(salad1); 
-
-console.log('Final price:\n' + calculatePrice(menuItems) + ' tugrics')
-console.log('Final amount of calories:\n' + calculateCalories(menuItems) + ' cal')  
-
-//To delete some food
-function deleteMenuItem(item) {
-    if (isPaid === false){
-    var delmenuItems = menuItems.indexOf(item);
-	return menuItems.splice(delmenuItems, 1)}  
-		else { return 'Order has already been paid. It\'s impossible to delete anything!'}
+function OrderCreator(...args){
+	this.array = args;
 }
 
-deleteMenuItem(burger1);
- 
-console.log('Prices and calories after deleting an item')
-console.log('Final price:\n' + calculatePrice(menuItems) + ' tugrics')
-console.log('Final amount of calories:\n' + calculateCalories(menuItems) + ' cal')  
+OrderCreator.prototype.addNewItem = function (item, payment) { 
+	if (payment === false){
+        return this.array.push(item);}
+    else {
+    	return 'Order has already been paid. Start new order!'
+    }
+}; 
 
-function isFinished(){
+OrderCreator.prototype.deleteItem = function (item, payment) { 
+    if (payment === false){
+        var delmenuItems = this.array.indexOf(item);
+	  return this.array.splice(delmenuItems, 1)}  
+	else { return 'Order has already been paid. It\'s impossible to delete anything!'}
+};
+
+OrderCreator.prototype.calculateOrderPrice = function () { 
+    var sum = 0;
+    for(var i = 0; i < this.array.length; i++){
+        sum += this.array[i].price;
+    }
+    return sum;
+}; 
+
+OrderCreator.prototype.calculateOrderCalories = function () { 
+    var sum = 0;
+    for(var i = 0; i < this.array.length; i++){
+        sum += this.array[i].calories;
+    }
+    return sum;
+}; 
+
+function closeOrder(){
 if(isPaid === false) {
 isPaid = true;
 return 'Order has been paid!'
 }}
 
-console.log(isFinished());
-console.log(addMenuItem(salad1));
+var order1 = new OrderCreator(burger1, drink1);
+
+//Tests
+ 
+console.log('Bill: ' + order1.calculateOrderPrice() + ' tugrics ' + order1.calculateOrderCalories() + ' calories');
+order1.addNewItem(salad1, isPaid);
+console.log('Bill: ' + order1.calculateOrderPrice() + ' tugrics ' + order1.calculateOrderCalories() + ' calories');
+order1.deleteItem(burger1, isPaid);
+console.log('Bill: ' + order1.calculateOrderPrice() + ' tugrics ' + order1.calculateOrderCalories() + ' calories');
+closeOrder();
+console.log(isPaid);
+order1.addNewItem(salad1, isPaid);
+console.log('Bill: ' + order1.calculateOrderPrice() + ' tugrics ' + order1.calculateOrderCalories() + ' calories');
